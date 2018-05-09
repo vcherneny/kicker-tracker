@@ -115,6 +115,20 @@ export class GamesListPage extends React.Component  {
     }
   }
 
+  goToRecent = () => {
+    this.props.history.push('/list');
+  }
+
+  recentGamesButton() {
+    if (this.state.gameIsStarted) return null;
+
+    return (
+      <div className='button-row' style={styles.buttonRow}>
+        <Button onClick={this.goToRecent}>Recent games</Button>
+      </div>
+    )
+  }
+
   setupActionCable = () => {
     this.subscription = cable.subscriptions.create(
       'ScoresUpdateChannel',
@@ -167,6 +181,7 @@ export class GamesListPage extends React.Component  {
                 </div>
               </div>
             </div>
+            {this.recentGamesButton()}
           </div>
         </Content>
       </Layout>
