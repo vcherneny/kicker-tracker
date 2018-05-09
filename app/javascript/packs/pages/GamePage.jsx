@@ -1,11 +1,11 @@
 import React from 'react';
 import request from 'axios';
-import { Layout, Button } from 'antd';
+import { Layout } from 'antd';
 import { GamesList } from '../components';
 
 const { Header, Content } = Layout;
 
-export class GamesListPage extends React.Component  {
+export class GamePage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -23,15 +23,8 @@ export class GamesListPage extends React.Component  {
 
   gamesList() {
     if (!this.state.games.length) return null;
-    
-    return <GamesList games={this.state.games}/>;
-  }
 
-  createGame = () => {
-    request.post('/games').then(resp => {
-      const game = resp.data; console.log('this.props.history', this.props.history)
-      this.props.history.push(`/games/${game.id}`)
-    });
+    return <GamesList games={this.state.games} />;
   }
 
   render() {
@@ -41,7 +34,6 @@ export class GamesListPage extends React.Component  {
           Header
         </Header>
         <Content>
-          <Button type="primary" onClick={this.createGame}>New game</Button>
           {this.gamesList()}
         </Content>
       </Layout>
