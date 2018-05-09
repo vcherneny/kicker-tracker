@@ -3,7 +3,7 @@ class ScoresController < ApplicationController
 
   def left
     left_team_score = current_game.left_team_score + 1
-    current_game.update(left_team_score: right_team_score) if current_game.present?
+    current_game.update(left_team_score: left_team_score) if current_game.present?
   end
 
   def right
