@@ -8,7 +8,7 @@ class Game < ApplicationRecord
   end
 
   def check_if_finished
-    update(finished: true) if (left_team_score == 10 || right_team_score == 10) && finished == false
+    update(finished: true) if (left_team_score == 5 || right_team_score == 5) && finished == false
   end
 
   def mark_all_games_as_finished
