@@ -8,10 +8,10 @@ const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render((
       <BrowserRouter>
-        <ActionCableProvider cable={cable}>
+        <div>
           <Route exact path="/" component={GamesListPage} />
           <Route exact path="/games/:id" component={GamePage} />
-        </ActionCableProvider>
+        </div>
       </BrowserRouter>),
     document.body.appendChild(document.createElement('div')),
   )

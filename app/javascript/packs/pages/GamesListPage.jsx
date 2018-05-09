@@ -19,6 +19,18 @@ export class GamesListPage extends React.Component  {
       const games = resp.data;
       this.setState({ games });
     });
+
+    const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
+    console.log(cable, 'cable')
+
+    this.subscription = cable.subscriptions.create(
+      'ScoresUpdateChannel',
+      {
+        received(data) {
+          console.log(data)
+        }
+      }
+    )
   }
 
   gamesList() {

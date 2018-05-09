@@ -18,14 +18,13 @@ class GamePage extends React.Component {
   }
 
   componentDidMount() {
-    this.subscription = cable.subscriptions.create(
-      'ScoresUpdateChannel',
-      {
-        received(data) {
-          console.log(data)
-        }
-      }
-    )
+
+
+    const socket = new WebSocket('ws://localhost:3000/cable');
+
+    socket.onmessage = function(params) {
+      console.log(params)
+    }
   }
 
   componentWillMount() {
@@ -36,6 +35,15 @@ class GamePage extends React.Component {
   }
 
   render() {
+    console.log('created')
+    this.subscription = cable.subscriptions.create(
+      'ScoresUpdateChannel',
+      {
+        received(data) {
+          console.log(data)
+        }
+      }
+    )
     return (
       <Layout>
         <Header>
