@@ -179,7 +179,7 @@ export class GamesListPage extends React.Component  {
             <div className="score-row" style={styles.scoreRow}>
               <div className="score-col" style={{ ...styles.scoreCol, marginRight: '100px' }}>
                 <div className="team-name">
-                  Team 1
+                  Team 1 <span style={{width: '25px', height: '25px', borderRadius: '50%', display: 'inline-block', background: '#e5e5e5'}}></span>
                 </div>
                 <div className="team-score">
                   {this.leftScore()}
@@ -187,7 +187,7 @@ export class GamesListPage extends React.Component  {
               </div>
               <div className="score-col" style={styles.scoreCol}>
                 <div className="team-name">
-                  Team 2
+                  <span style={{width: '25px', height: '25px', borderRadius: '50%', display: 'inline-block', background: '#0000FF'}}></span> Team 2
                 </div>
                 <div className="team-score">
                   {this.rightScore()}
