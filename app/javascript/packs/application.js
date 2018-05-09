@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
       <BrowserRouter>
         <div>
           <Route exact path="/" component={GamesListPage} />
-          <Route exact path="/games/:id" component={GamePage} />
+          <Route exact path="/current" component={GamePage} />
         </div>
       </BrowserRouter>),
     document.body.appendChild(document.createElement('div')),

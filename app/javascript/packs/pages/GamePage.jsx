@@ -8,34 +8,23 @@ const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
 
 const { Header, Content } = Layout;
 
-class GamePage extends React.Component {
+export class GamePage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      games: [],
-    }
-  }
-
-  componentDidMount() {
-
-
-    const socket = new WebSocket('ws://localhost:3000/cable');
-
-    socket.onmessage = function(params) {
-      console.log(params)
+      game: null,
     }
   }
 
   componentWillMount() {
-    
+    request.get('/game/current').then(resp => {
+      this.setState({ game: resp.data });
+      this.setupActionCable();
+    })
   }
 
-  gamesList() {
-  }
-
-  render() {
-    console.log('created')
+  setupActionCable = () => {
     this.subscription = cable.subscriptions.create(
       'ScoresUpdateChannel',
       {
@@ -44,6 +33,9 @@ class GamePage extends React.Component {
         }
       }
     )
+  }
+
+  render() {
     return (
       <Layout>
         <Header>
