@@ -14,13 +14,17 @@ const styles = {
   scoreRow: {
     display: 'flex',
     justifyContent: 'center',
+    fontSize: '32px',
   },
   scoreCol: {
     textAlign: 'center',
+    color: '#fff',
   },
   buttonRow: {
     display: 'flex',
     justifyContent: 'center',
+    marginTop: '30px',
+    marginBottom: '30px'
   }
 }
 
@@ -56,8 +60,7 @@ export class GamesListPage extends React.Component  {
   createGame = () => {
     request.post('/games').then(resp => {
       const game = resp.data;
-      debugger
-      console.log('game', game)
+
       this.setState({
         gameIsStarted: true,
         currentGame: game
@@ -114,7 +117,7 @@ export class GamesListPage extends React.Component  {
         <Content>
           {this.button()}
           <div className="score-row" style={styles.scoreRow}>
-            <div className="score-col" style={styles.scoreCol}>
+            <div className="score-col" style={{ ...styles.scoreCol, marginRight: '100px' }}>
               <div className="team-name">
                 Team 1
               </div>
