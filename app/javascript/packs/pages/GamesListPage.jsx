@@ -30,10 +30,21 @@ export class GamesListPage extends React.Component  {
 
     this.state = {
       gameIsStarted: false,
+      currentGame: null,
     }
   }
 
   componentWillMount() {
+    request.get('/games/current').then(resp => {
+      const game = resp.data;
+
+      if (!game.finished) {
+        this.setState({
+          gameIsStarted: true,
+          currentGame: game
+        });
+      }
+    });
   }
 
   gamesList() {
@@ -44,9 +55,33 @@ export class GamesListPage extends React.Component  {
 
   createGame = () => {
     request.post('/games').then(resp => {
-      this.setState({ gameIsStarted: true })
-      const game = resp.data; console.log('this.props.history', this.props.history)
+      const game = resp.data;
+      debugger
+      console.log('game', game)
+      this.setState({
+        gameIsStarted: true,
+        currentGame: game
+      });
     });
+  }
+
+  endGame = () => {
+    this.setState({
+      gameIsStarted: false,
+      currentGame: null
+    })
+  }
+
+  leftScore() {
+    if (!this.state.gameIsStarted) return 0;
+
+    return this.state.currentGame.left_team_score;
+  }
+  
+  rightScore() {
+    if (!this.state.gameIsStarted) return 0;
+
+    return this.state.currentGame.right_team_score;
   }
 
   button() {
@@ -84,7 +119,7 @@ export class GamesListPage extends React.Component  {
                 Team 1
               </div>
               <div className="team-score">
-                0
+                {this.leftScore()}
               </div>
             </div>
             <div className="score-col" style={styles.scoreCol}>
@@ -92,7 +127,7 @@ export class GamesListPage extends React.Component  {
                 Team 2
               </div>
               <div className="team-score">
-                0
+                {this.rightScore()}
               </div>
             </div>
           </div>
