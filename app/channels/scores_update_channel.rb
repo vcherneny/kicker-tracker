@@ -1,6 +1,6 @@
 class ScoresUpdateChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "scores_update"
+    stream_from "scores_update_channel"
   end
 
   def unsubscribed

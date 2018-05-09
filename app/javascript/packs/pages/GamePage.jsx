@@ -3,9 +3,12 @@ import request from 'axios';
 import { Layout } from 'antd';
 import { GamesList } from '../components';
 
+import { ActionCableProvider } from 'react-actioncable-provider'
+const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
+
 const { Header, Content } = Layout;
 
-export class GamePage extends React.Component {
+class GamePage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -14,17 +17,22 @@ export class GamePage extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.subscription = cable.subscriptions.create(
+      'ScoresUpdateChannel',
+      {
+        received(data) {
+          console.log(data)
+        }
+      }
+    )
+  }
+
   componentWillMount() {
-    request.get('/games').then(resp => {
-      const games = resp.data;
-      this.setState({ games });
-    });
+    
   }
 
   gamesList() {
-    if (!this.state.games.length) return null;
-
-    return <GamesList games={this.state.games} />;
   }
 
   render() {
@@ -34,7 +42,8 @@ export class GamePage extends React.Component {
           Header
         </Header>
         <Content>
-          {this.gamesList()}
+          <div>left: </div>
+          <div>right: </div>
         </Content>
       </Layout>
     );
