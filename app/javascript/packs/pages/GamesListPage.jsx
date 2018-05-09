@@ -6,7 +6,7 @@ import { GamesList } from '../components';
 const { Header, Content} = Layout;
 
 import { ActionCableProvider } from 'react-actioncable-provider'
-const cable = ActionCable.createConsumer(`ws://localhost:3000/cable`)
+const cable = ActionCable.createConsumer(`ws://${window.location.hostname}/cable`)
 
 const contentStyle = {
   display: 'flex',
@@ -58,7 +58,7 @@ export class GamesListPage extends React.Component  {
 
   gamesList() {
     if (!this.state.games.length) return null;
-    
+
     return <GamesList games={this.state.games}/>;
   }
 
@@ -91,7 +91,7 @@ export class GamesListPage extends React.Component  {
 
     return this.state.currentGame.left_team_score;
   }
-  
+
   rightScore() {
     if (!this.state.gameIsStarted) return 0;
 

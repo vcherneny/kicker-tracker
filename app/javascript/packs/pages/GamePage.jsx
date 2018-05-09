@@ -4,7 +4,7 @@ import { Layout } from 'antd';
 import { GamesList } from '../components';
 
 import { ActionCableProvider } from 'react-actioncable-provider'
-const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
+const cable = ActionCable.createConsumer(`ws://${window.location.hostname}/cable`)
 
 const { Header, Content } = Layout;
 
