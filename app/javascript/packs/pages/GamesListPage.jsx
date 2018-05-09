@@ -15,22 +15,6 @@ export class GamesListPage extends React.Component  {
   }
 
   componentWillMount() {
-    request.get('/games').then(resp => {
-      const games = resp.data;
-      this.setState({ games });
-    });
-
-    const cable = ActionCable.createConsumer('ws://localhost:3000/cable')
-    console.log(cable, 'cable')
-
-    this.subscription = cable.subscriptions.create(
-      'ScoresUpdateChannel',
-      {
-        received(data) {
-          console.log(data)
-        }
-      }
-    )
   }
 
   gamesList() {
@@ -54,7 +38,6 @@ export class GamesListPage extends React.Component  {
         </Header>
         <Content>
           <Button type="primary" onClick={this.createGame}>New game</Button>
-          {this.gamesList()}
         </Content>
       </Layout>
     );
