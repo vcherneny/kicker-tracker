@@ -15,9 +15,6 @@ class Game < ApplicationRecord
   end
 
   def send_data_to_channel
-    ScoresUpdateChannel.broadcast_to(
-      "scores_update",
-      game: self.to_json
-    )
+    ActionCable.server.broadcast 'scores_update_channel', message: {game: self.to_json}
   end
 end
