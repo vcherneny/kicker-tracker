@@ -141,7 +141,8 @@ export class GamesListPage extends React.Component  {
           if (game && !game.finished) {
             this.setState({
               gameIsStarted: true,
-              currentGame: game
+              currentGame: game,
+              winner: null,
             });
           } else if (game.finished){
             if (this.state.currentGame.right_team_score !== this.state.currentGame.left_team_score){
