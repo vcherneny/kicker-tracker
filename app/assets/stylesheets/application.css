@@ -21296,7 +21296,7 @@ li.ant-tree-treenode-disabled > .ant-tree-node-content-wrapper:hover {
 
 .ant-layout {
   height: 100vh;
-  background: url('bg.jpg');
+  /* background: url('bg.jpg'); */
   background-size: cover;
   background-repeat: no-repeat;
 }

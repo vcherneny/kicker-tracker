@@ -2,6 +2,7 @@ import React from 'react';
 import request from 'axios';
 import { Layout, Button, Row, Col } from 'antd';
 import { GamesList } from '../components';
+import background from '../../../../app/assets/images/bg.jpg';
 
 const { Header, Content} = Layout;
 
@@ -145,7 +146,7 @@ export class GamesListPage extends React.Component  {
         }}>
           Kicker Tracker
         </Header>
-        <Content>
+        <Content style={{ backgroundImage: `url(${background})`, backgroundSize: 'cover'}}>
           <div style={{ }}>
             {this.button()}
             <div className="score-row" style={styles.scoreRow}>

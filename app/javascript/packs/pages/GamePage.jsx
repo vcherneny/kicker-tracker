@@ -42,8 +42,7 @@ export class GamePage extends React.Component {
           Header
         </Header>
         <Content>
-          <div>left: </div>
-          <div>right: </div>
+          
         </Content>
       </Layout>
     );
