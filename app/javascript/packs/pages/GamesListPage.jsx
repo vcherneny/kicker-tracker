@@ -5,6 +5,9 @@ import { GamesList } from '../components';
 
 const { Header, Content} = Layout;
 
+import { ActionCableProvider } from 'react-actioncable-provider'
+const cable = ActionCable.createConsumer(`ws://localhost:3000/cable`)
+
 const contentStyle = {
   display: 'flex',
   flexFlow: 'column',
@@ -42,11 +45,13 @@ export class GamesListPage extends React.Component  {
     request.get('/games/current').then(resp => {
       const game = resp.data;
 
-      if (!game.finished) {
+      if (game && !game.finished) {
         this.setState({
           gameIsStarted: true,
           currentGame: game
         });
+
+        this.setupActionCable();
       }
     });
   }
@@ -65,14 +70,20 @@ export class GamesListPage extends React.Component  {
         gameIsStarted: true,
         currentGame: game
       });
+
+      this.setupActionCable();
     });
   }
 
   endGame = () => {
-    this.setState({
-      gameIsStarted: false,
-      currentGame: null
-    })
+    request.delete('/games').then(resp => {
+      const game = resp.data;
+
+      this.setState({
+        gameIsStarted: false,
+        currentGame: null
+      })
+    });
   }
 
   leftScore() {
@@ -97,14 +108,34 @@ export class GamesListPage extends React.Component  {
     } else {
       return (
         <div className='button-row' style={styles.buttonRow}>
-          <Button type="primary" onClick={this.endGame}>End game</Button>
+          <Button type="danger" onClick={this.endGame}>End game</Button>
         </div>
       )
     }
   }
 
+  setupActionCable = () => {
+    this.subscription = cable.subscriptions.create(
+      'ScoresUpdateChannel',
+      {
+        received: (data) => {
+          const game = JSON.parse(data.message.game)
+          if (game && !game.finished) {
+            this.setState({
+              gameIsStarted: true,
+              currentGame: game
+            });
+          }
+        }
+      }
+    )
+  }
+
+  destroyActionCable() {
+    this.subscription.unsubscribe();
+  }
+
   render() {
-    
     return (
       <Layout>
         <Header style={{
@@ -115,22 +146,24 @@ export class GamesListPage extends React.Component  {
           Kicker Tracker
         </Header>
         <Content>
-          {this.button()}
-          <div className="score-row" style={styles.scoreRow}>
-            <div className="score-col" style={{ ...styles.scoreCol, marginRight: '100px' }}>
-              <div className="team-name">
-                Team 1
+          <div style={{ }}>
+            {this.button()}
+            <div className="score-row" style={styles.scoreRow}>
+              <div className="score-col" style={{ ...styles.scoreCol, marginRight: '100px' }}>
+                <div className="team-name">
+                  Team 1
+                </div>
+                <div className="team-score">
+                  {this.leftScore()}
+                </div>
               </div>
-              <div className="team-score">
-                {this.leftScore()}
-              </div>
-            </div>
-            <div className="score-col" style={styles.scoreCol}>
-              <div className="team-name">
-                Team 2
-              </div>
-              <div className="team-score">
-                {this.rightScore()}
+              <div className="score-col" style={styles.scoreCol}>
+                <div className="team-name">
+                  Team 2
+                </div>
+                <div className="team-score">
+                  {this.rightScore()}
+                </div>
               </div>
             </div>
           </div>
