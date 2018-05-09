@@ -47,7 +47,7 @@ export class GamePage extends React.Component {
 
   table() {
     return (
-      <Table 
+      <Table
         dataSource={this.state.games}
         columns={columns}
       />

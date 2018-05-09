@@ -14,7 +14,8 @@ class GamesController < ApplicationController
   end
 
   def destroy
-    Game.current.update(finished: true)
-    render json: { status: :ok }
+    game = Game.current
+    game.update(finished: true)
+    render json: game
   end
 end

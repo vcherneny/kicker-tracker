@@ -39,6 +39,7 @@ export class GamesListPage extends React.Component  {
     this.state = {
       gameIsStarted: false,
       currentGame: null,
+      winner: null,
     }
   }
 
@@ -69,7 +70,8 @@ export class GamesListPage extends React.Component  {
 
       this.setState({
         gameIsStarted: true,
-        currentGame: game
+        currentGame: game,
+        winner: null,
       });
 
       this.setupActionCable();
@@ -79,24 +81,25 @@ export class GamesListPage extends React.Component  {
   endGame = () => {
     request.delete('/games').then(resp => {
       const game = resp.data;
+      console.log(game)
 
       this.setState({
         gameIsStarted: false,
-        currentGame: null
+        currentGame: game
       })
     });
   }
 
   leftScore() {
-    if (!this.state.gameIsStarted) return 0;
+    if (this.state.currentGame) return this.state.currentGame.left_team_score;
 
-    return this.state.currentGame.left_team_score;
+    return 0;
   }
 
   rightScore() {
-    if (!this.state.gameIsStarted) return 0;
+    if (this.state.currentGame) return this.state.currentGame.right_team_score;
 
-    return this.state.currentGame.right_team_score;
+    return 0;
   }
 
   button() {
@@ -140,6 +143,15 @@ export class GamesListPage extends React.Component  {
               gameIsStarted: true,
               currentGame: game
             });
+          } else if (game.finished){
+            if (this.state.currentGame.right_team_score !== this.state.currentGame.left_team_score){
+              const winner = this.state.currentGame.right_team_score > this.state.currentGame.left_team_score ? 'Team 2' : 'Team 1'
+              this.setState({winner: winner});
+            }
+            this.setState({
+              gameIsStarted: false,
+              currentGame: game,
+            });
           }
         }
       }
@@ -181,6 +193,16 @@ export class GamesListPage extends React.Component  {
                 </div>
               </div>
             </div>
+            { (this.state.winner) ? (
+                <div className="score-row" style={styles.scoreRow}>
+                  <div className="score-col" style={{ ...styles.scoreCol }}>
+                    <div className="team-name">
+                      {this.state.winner} win!
+                    </div>
+                  </div>
+                </div>
+              ) : null
+            }
             {this.recentGamesButton()}
           </div>
         </Content>
