@@ -1,5 +1,6 @@
 class Game < ApplicationRecord
   before_create :mark_all_games_as_finished
+  after_create :send_data_to_channel
   after_update :check_if_finished, :send_data_to_channel
 
   def self.current
