@@ -7,7 +7,7 @@ import background from '../../../../app/assets/images/bg.jpg';
 const { Header, Content} = Layout;
 
 import { ActionCableProvider } from 'react-actioncable-provider'
-const cable = ActionCable.createConsumer(`ws://${window.location.hostname}/cable`)
+const cable = ActionCable.createConsumer(`ws://${window.location.host}/cable`)
 
 const contentStyle = {
   display: 'flex',
