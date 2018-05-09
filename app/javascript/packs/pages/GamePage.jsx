@@ -1,6 +1,6 @@
 import React from 'react';
 import request from 'axios';
-import { Layout, Table } from 'antd';
+import { Layout, Table, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { GamesList } from '../components';
 
@@ -58,17 +58,17 @@ export class GamePage extends React.Component {
     return (
       <Layout>
         <Header style={{
-            fontSize: '32px',
-            'textAlign': 'center',
-            color: '#fff'
-          }}
+          fontSize: '32px',
+          'textAlign': 'center',
+          color: '#fff'
+        }}
         >
-          Recent Games
+        Recent Games
         </Header>
         <Content>
           {this.table()}
+          <Button onClick={() => this.props.history.push('/')}>Go back</Button>
         </Content>
-        <Link to="/">Go back</Link>
       </Layout>
     );
   }
