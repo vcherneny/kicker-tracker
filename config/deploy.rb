@@ -1,10 +1,10 @@
 # config valid for current version and patch releases of Capistrano
 lock "~> 3.10.2"
 
-set :application, "kicker"
+set :application, "kicker-tracker"
 set :repo_url, "git@github.com:UladzislauCharneny/kicker-tracker.git"
 
-set :deploy_to, '/home/deploy/kicker'
+set :deploy_to, '/home/deploy/kicker-tracker'
 
 append :linked_files, "config/database.yml", "config/secrets.yml"
 append :linked_dirs, "log", "tmp/pids", "tmp/cache", "tmp/sockets", "vendor/bundle", "public/system", "public/uploads"

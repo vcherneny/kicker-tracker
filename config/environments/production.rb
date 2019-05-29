@@ -26,7 +26,7 @@ config.webpacker.check_yarn_integrity = false
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
-  config.action_cable.allowed_request_origins = ["http://159.89.111.143/"]
+  config.action_cable.allowed_request_origins = ["http://104.248.81.177/"]
 
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
