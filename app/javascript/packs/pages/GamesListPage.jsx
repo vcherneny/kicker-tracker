@@ -1,8 +1,13 @@
 import React from 'react';
 import request from 'axios';
 import { Layout, Button, Row, Col } from 'antd';
+import moment from 'moment';
 import { GamesList } from '../components';
 import background from '../../../../app/assets/images/bg.jpg';
+import golShout from '../../../../app/assets/audio/gol-shout.mp3';
+import startGame  from '../../../../app/assets/audio/start-game.wav';
+import endGame  from '../../../../app/assets/audio/end-game.wav';
+import crowd  from '../../../../app/assets/audio/crowd.wav';
 
 const { Header, Content} = Layout;
 
@@ -40,7 +45,30 @@ export class GamesListPage extends React.Component  {
       gameIsStarted: false,
       currentGame: null,
       winner: null,
+      timer: 0,
     }
+    this.timer = null;
+  }
+
+  golShoutSound() {
+    const sound = new Audio(golShout);
+    setTimeout(() => sound.play());
+    setTimeout(() => this.crowdSound(), 4000);
+  }
+
+  startGameSound() {
+    const sound = new Audio(startGame);
+    setTimeout(() => sound.play());
+  }
+
+  endGameSound() {
+    const sound = new Audio(endGame);
+    setTimeout(() => sound.play());
+  }
+
+  crowdSound() {
+    const sound = new Audio(crowd);
+    setTimeout(() => sound.play());
   }
 
   componentWillMount() {
@@ -73,7 +101,8 @@ export class GamesListPage extends React.Component  {
         currentGame: game,
         winner: null,
       });
-
+      this.startGameSound();
+      this.startClock();
       this.setupActionCable();
     });
   }
@@ -86,7 +115,9 @@ export class GamesListPage extends React.Component  {
       this.setState({
         gameIsStarted: false,
         currentGame: game
-      })
+      });
+      this.endGameSound();
+      this.clearClock();
     });
   }
 
@@ -132,6 +163,23 @@ export class GamesListPage extends React.Component  {
     )
   }
 
+  checkGameState(prev, next) {
+    if (prev.right_team_score < next.right_team_score) {
+      return this.golShoutSound();
+    }
+    if (prev.left_team_score < next.left_team_score) {
+      return this.golShoutSound();
+    }
+  }
+
+  startClock() {
+    setInterval(() => this.setState({ timer: this.state.timer + 1 }), 1000);
+  }
+
+  clearClock() {
+    clearInterval(this.timer);
+  }
+
   setupActionCable = () => {
     this.subscription = cable.subscriptions.create(
       'ScoresUpdateChannel',
@@ -143,7 +191,8 @@ export class GamesListPage extends React.Component  {
               gameIsStarted: true,
               currentGame: game,
               winner: null,
-            });
+              timer: 0,
+            }, this.checkGameState(this.state.currentGame, game));
           } else if (game.finished){
             if (this.state.currentGame.right_team_score !== this.state.currentGame.left_team_score){
               const winner = this.state.currentGame.right_team_score > this.state.currentGame.left_team_score ? 'Team 2' : 'Team 1'
@@ -152,6 +201,7 @@ export class GamesListPage extends React.Component  {
             this.setState({
               gameIsStarted: false,
               currentGame: game,
+              timer: 0,
             });
           }
         }
@@ -161,6 +211,19 @@ export class GamesListPage extends React.Component  {
 
   destroyActionCable() {
     this.subscription.unsubscribe();
+  }
+
+  clock() {
+    if (!this.state.gameIsStarted) { return null; }
+    const formatedTime = moment.utc(this.state.timer * 1000).format('mm:ss');
+    return (
+      <div className="score-row" style={styles.scoreRow}>
+        <div className="score-col" style={{ ...styles.scoreCol }}>
+          <div className="team-name" style={{color: '#00CC11'}}>
+            {formatedTime}
+          </div>
+        </div>
+      </div>);
   }
 
   render() {
@@ -202,7 +265,7 @@ export class GamesListPage extends React.Component  {
                     </div>
                   </div>
                 </div>
-              ) : null
+              ) : this.clock()
             }
             {this.recentGamesButton()}
           </div>

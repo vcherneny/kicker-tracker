@@ -28,6 +28,9 @@ default: &default
     - .jpeg
     - .jpg
 
+  static_assets_extensions:
+    - .mp3
+
 development:
   <<: *default
   compile: true
